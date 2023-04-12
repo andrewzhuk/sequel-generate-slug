@@ -1,6 +1,8 @@
 
 # Sequel Generate Slug
 
+[![Gem Version](https://badge.fury.io/rb/sequel-generate-slug.svg)](https://badge.fury.io/rb/sequel-generate-slug)
+
 Sequel Generate Slug is a plugin automatically generates a URL-friendly slug for your [Sequel](https://github.com/jeremyevans/sequel) model instances. By default, it uses the `title` column as the source and stores the generated `slug` in the slug column. It can also use an additional column to create unique slugs.
 
 ### Usage
