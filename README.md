@@ -19,8 +19,56 @@ You can customize the slug column, source column, and additional column:
 
 ```ruby
 class MyModel < Sequel::Model
-  plugin :generate_slug, column: :custom_slug, source: :title, additional: :custom_identifier
+  plugin :generate_slug, column: :slug, source: :title, additional: :custom_identifier
 end
+```
+
+Here we connect the plugin to the `Post` model, specify that we want to use the `slug` column to store the generated slugs, and also specify that the attribute `title` will be the source for generating the slug, and the `identifier` attribute will be used for additional uniqueness.
+
+After connecting the plugin and creating a model record, you can get the generated slug by calling the `slug` method:
+
+```ruby
+post = Post.create(title: 'Hello World', identifier: 'abcdef')
+post.slug # => 'hello-world'
+```
+
+If you create another record with the same attribute values for title and identifier, the slug will be appended with a unique number:
+
+```ruby
+post = Post.create(title: 'Hello World', identifier: 'abcdef')
+post.slug # => 'hello-world-abcdef'
+```
+
+In case all the generated slugs are already taken, the plugin will generate a unique number for the slug:
+    
+```ruby
+post = Post.create(title: 'Hello World', identifier: 'abcdef')
+post.slug # => 'hello-world-abcdef-1'
+```
+
+If you update a post's title and it no longer conflicts with any other titles, the slug will be regenerated based on the new title:
+
+```ruby
+post.update(title: 'Hello World Again', identifier: 'abcdef')
+post.slug # => 'hello-world-again'
+```
+
+#### Options:
+
+The GenerateSlug plugin has the following options:
+
+`column`: The name of the column in which the generated slugs will be stored. By default, the **slug** column is used.
+
+`source`: The name of the attribute that will be used to generate the slug. By default, the **title** attribute is used.
+
+`additional`: The name of the attribute that will be used for slug uniqueness. By default, the **identifier** column is used.
+
+#### Testing:
+
+The RSpec library is used to test the GenerateSlug plugin. To run the tests, you need to execute the command:
+
+```bash
+bundle exec rspec
 ```
 
 ### Installation
@@ -37,17 +85,9 @@ And then execute:
 $ bundle install
 ```
 
-## License
-
-Sequel Generate Slug is released under the [MIT License](https://opensource.org/licenses/MIT).
-
-This means that you are free to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the project's software without restriction, provided that the above copyright notice and this license notice appear in all copies.
-
-Please note that the Sequel Generate Slug is provided "as is" and without warranty of any kind, express or implied. The project's contributors shall not be liable for any damages or liabilities arising from the use or inability to use the project's software. Use at your own risk.
-
 ## Contributing
 
-We welcome and appreciate contributions from the community to help improve and expand our NFT marketplace platform. If you're interested in contributing, please follow these steps:
+We welcome and appreciate contributions from the community to help improve and expand our software. If you're interested in contributing, please follow these steps:
 
 1. **Fork the repository**: Create a fork of the main repository by clicking the "Fork" button in the top-right corner of this page.
 
@@ -64,3 +104,11 @@ We welcome and appreciate contributions from the community to help improve and e
 7. **Push your changes**: Push your changes to your fork on GitHub by running `git push origin <branch_name>`.
 
 8. **Create a pull request**: Finally, navigate to the main repository's "Pull Requests" tab, and click the "New Pull Request" button. Select your fork and branch as the source, and create a descriptive title and summary for your contribution. Click "Create Pull Request" to submit your changes for review.
+
+## License
+
+Sequel Generate Slug is released under the [MIT License](https://opensource.org/licenses/MIT).
+
+This means that you are free to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the project's software without restriction, provided that the above copyright notice and this license notice appear in all copies.
+
+Please note that the Sequel Generate Slug is provided "as is" and without warranty of any kind, express or implied. The project's contributors shall not be liable for any damages or liabilities arising from the use or inability to use the project's software. Use at your own risk.
