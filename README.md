@@ -5,6 +5,8 @@
 
 Sequel Generate Slug is a plugin automatically generates a URL-friendly slug for your [Sequel](https://github.com/jeremyevans/sequel) model instances. By default, it uses the `title` column as the source and stores the generated `slug` in the slug column. It can also use an additional column to create unique slugs.
 
+The plugin supports multi-language slugs, so you can use any language to create slugs for your models. Additionally, if you update the title column of a model instance, the plugin will automatically generate a new slug based on the updated title.
+
 ### Usage
 
 ```ruby
@@ -62,6 +64,22 @@ The GenerateSlug plugin has the following options:
 `source`: The name of the attribute that will be used to generate the slug. By default, the **title** attribute is used.
 
 `additional`: The name of the attribute that will be used for slug uniqueness. By default, the **identifier** column is used.
+
+
+#### Multi-language support:
+
+The plugin supports multi-language slugs, so you can use any language to create slugs for your models.
+
+```ruby
+post_ukr = Post.create(title: 'Доброго вечора ми з України', identifier: 'abcdef')
+post_ukr.slug # => 'dobrogho-viechora-mi-z-ukrayini'
+
+post_cn = Post.create(title: '你好，世界', identifier: 'abcdef')
+post_cn.slug # => 'ni-hao-shi-jie'
+
+post_fr = Post.create(title: 'Bonjour le monde', identifier: 'abcdef')
+post_fr.slug # => 'bonjour-le-monde'
+```
 
 #### Testing:
 
